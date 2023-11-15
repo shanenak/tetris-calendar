@@ -1,1 +1,26 @@
-/* TODO: Add site-wide styles */
+:root {
+    --main-bg-color: #FFF8EB;
+    --color-0: #FFEBC2;
+    --color-1: #1E1EF0;
+    --color-2: #F15025;
+    --color-3: #B2B2FA;
+    --color-4: #93C48B;
+    --color-5: #79ADDC;
+    --color-6: #FEAB95;
+    --color-7: #55954B;
+    --color-8: #FFC145;
+    --border-color: #FFF8EB;
+
+    --cols: 7;
+    --rows: 7;
+    --square-size: 50px;
+    --border-width: 5px;
+}
+
+body {
+    background-color: var(--main-bg-color);
+}
+
+#root {
+    height: 100vh;
+}
