@@ -1,10 +1,21 @@
+import { Provider, createStoreHook } from "react-redux";
 import Calendar from "./components/Calendar";
+import reducers from "./reducers";
+import { configureStore } from "@reduxjs/toolkit";
+
+const preloadedState = {};
+const store = configureStore({
+    reducer: reducers, 
+    preloadedState: preloadedState
+});
 
 function App() {
   return (
-    <>
-      <Calendar/>
-    </>
+    <Provider store={store}>
+      <>
+        <Calendar/>
+      </>
+    </Provider>
   );
 }
 
