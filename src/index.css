@@ -17,10 +17,10 @@
     --border-width: 5px;
 }
 
-body {
-    background-color: var(--main-bg-color);
+* {
+    box-sizing: border-box;
 }
 
-#root {
-    height: 100vh;
+body {
+    background-color: var(--main-bg-color);
 }

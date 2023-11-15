@@ -11,11 +11,8 @@
 
 .grid-squares {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    column-gap: 2px;
-    row-gap: 2px;
-    height: 100%;
+    grid-template-columns: repeat(var(--cols), var(--square-size));
+    grid-gap: 0;
     text-align: center;
 }
 
