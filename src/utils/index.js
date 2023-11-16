@@ -10,19 +10,33 @@ export const defaultState = () => {
 }
 
 export const defaultGrid = () => {
-    const TILES = months.concat(days);
     const grid = [...Array(7)].map(e => Array(7));
 
     for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
-            grid[row][col] = <CalendarSquare color='0' label={TILES[(row * 7) + col]} />
+            grid[row][col] = <CalendarSquare color='0' label={tiles[(row * 7) + col]} key={`row${row}-col${col}`}/>
         }
     }
     return grid
 }
 
+export function blockDates(month, date) {
+    const grid = defaultGrid();
+
+    const monthRow = Math.floor(tiles.indexOf(month) / 7);
+    const monthCol = tiles.indexOf(month) % 7;
+    const dateRow = Math.floor(tiles.indexOf(date) / 7);
+    const dateCol = tiles.indexOf(date) % 7;
+
+    grid[monthRow][monthCol] = <CalendarSquare color='9' label={month} key={`row${monthRow}-col${monthCol}`}/>
+    grid[dateRow][dateCol] = <CalendarSquare color='9' label={date} key={`row${dateRow}-col${dateCol}`} />
+    return grid
+}
+
 export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', '', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ''];
 export const days = [...Array(31).keys()].map(ele => ele + 1);
+export const tiles = months.concat(days);
+
 export const gridSize = 7;
 
 export const pieces = [
