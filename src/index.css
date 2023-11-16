@@ -1,6 +1,8 @@
 :root {
     --main-bg-color: #FFF8EB;
+    /* color for tiles not yet assigned */
     --color-0: #FFEBC2;
+    /* colors are shape specific (identified by number) */
     --color-1: #1E1EF0;
     --color-2: #F15025;
     --color-3: #B2B2FA;
@@ -9,7 +11,10 @@
     --color-6: #FEAB95;
     --color-7: #55954B;
     --color-8: #FFC145;
-    --color-9: gray;
+    /* color for selected dates */
+    --color-9: gray; 
+    /* color for empty tiles on calendar */
+    --color-10: #FFF8EB;
     --border-color: #FFF8EB;
 
     --cols: 7;

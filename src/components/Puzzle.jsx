@@ -14,6 +14,10 @@ export default function Puzzle () {
     const dateStr = date.toString().padStart(2, '0')
 
     const blockedGrid = blockDates(month, date)
+    const solutions = solve(blockedGrid);
+    const solutionList = solutions[3] //Object.values(solutions)
+    console.log(solutionList)
+    const [selectedSolution, setSelectedSolution] = useState(0);
 
     useEffect(()=>{
         dispatch(receiveGrid(blockedGrid))
@@ -25,15 +29,26 @@ export default function Puzzle () {
         setDate(parseInt(dateValues[2]));
     }
 
-    const lastSolution = solve(blockedGrid);
+    const updateSolution = (e) => {
+        setSelectedSolution(e.target.value)
+    }
+
 
     return (
         <div>
             <label>Date
                 <input type="date" id="start" name="trip-start" value={`2023-${monthStr}-${dateStr}`} min="2023-01-01" max="2023-12-31" onChange={updateDate}/>
-
             </label>
-            <Calendar grid={gridToCalendar(lastSolution)}/>
+            <Calendar grid={gridToCalendar(solutionList[selectedSolution])}/>
+            <label>
+                <select name="solutions" onChange={updateSolution}>
+                    {solutionList.map((solution, solutionIdx)=> {
+                        return (
+                            <option value={solutionIdx}>{solutionIdx+1}</option>
+                        )
+                    })}
+                </select>
+            </label>
         </div>
     )
 }
@@ -53,8 +68,7 @@ function solve (grid) {
             }
         }
     }
-    console.log(solutions)
-    return solutions[7][0];
+    return solutions;
 }
 
 function place (piece, grid, option) {

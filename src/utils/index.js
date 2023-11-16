@@ -21,6 +21,13 @@ export const gridToCalendar = (grid) => {
 
 export const defaultGrid = () => {
     const grid = [...Array(7)].map(e => Array(7).fill(0));
+    // remove empty calendar squares from grid
+    grid[0][6] = 10;
+    grid[1][6] = 10;
+    grid[6][3] = 10;
+    grid[6][4] = 10;
+    grid[6][5] = 10;
+    grid[6][6] = 10;
     return grid
 }
 
