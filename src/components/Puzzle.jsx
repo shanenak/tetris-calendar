@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Calendar from "./Calendar";
 import { useEffect, useState } from "react";
-import { blockDates, tiles, months, gridSize, pieces, gridToCalendar, deepCopy } from "../utils";
-import CalendarSquare from "./CalendarSquare";
+import { blockDates, months, gridSize, pieces, gridToCalendar, deepCopy } from "../utils";
 import { receiveGrid } from "../actions";
 
 export default function Puzzle () {
@@ -14,8 +13,7 @@ export default function Puzzle () {
     const dateStr = date.toString().padStart(2, '0')
 
     const blockedGrid = blockDates(month, date)
-    const solutions = solve(blockedGrid);
-    const solutionList = solutions[3] //Object.values(solutions)
+    const solutionList = solve(blockedGrid);
     console.log(solutionList)
     const [selectedSolution, setSelectedSolution] = useState(0);
 
@@ -33,13 +31,12 @@ export default function Puzzle () {
         setSelectedSolution(e.target.value)
     }
 
-
     return (
         <div>
             <label>Date
                 <input type="date" id="start" name="trip-start" value={`2023-${monthStr}-${dateStr}`} min="2023-01-01" max="2023-12-31" onChange={updateDate}/>
             </label>
-            <Calendar grid={gridToCalendar(solutionList[selectedSolution])}/>
+            <Calendar grid={gridToCalendar((solutionList?.length ? solutionList[selectedSolution] : grid))}/>
             <label>
                 <select name="solutions" onChange={updateSolution}>
                     {solutionList.map((solution, solutionIdx)=> {
@@ -59,16 +56,17 @@ function solve (grid) {
         let currPiece = pieces[i];
         let currSolution = solutions[i][0];
         let currOptions = getOptions(currPiece, currSolution)
-        solutions[i+1]=[];
         if (currOptions.length===0) {
             break;
         } else {
+            solutions[i+1]=[];
             for (let j=0; j<currOptions.length; j++) {
                 solutions[i+1].push(place(currPiece, currSolution, currOptions[j]))
             }
         }
+        delete solutions[i];
     }
-    return solutions;
+    return Object.values(solutions)[0]; // index at 0 because values are already arrays
 }
 
 function place (piece, grid, option) {
