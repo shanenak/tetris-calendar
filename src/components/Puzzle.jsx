@@ -1,32 +1,35 @@
 import { useDispatch, useSelector } from "react-redux";
 import Calendar from "./Calendar";
 import { useEffect, useState } from "react";
-import { blockDates, months, gridSize, pieces, gridToCalendar, deepCopy } from "../utils";
+import { blockDates, MONTHS, GRID_SIZE, PIECES, makeCalendar, getDeepCopy } from "../utils";
 import { receiveGrid } from "../actions";
 
 export default function Puzzle () {
     let grid = useSelector((state)=> state.puzzle.grid)
     const dispatch = useDispatch();
+
+    // set date
     const [month, setMonth] = useState('Nov');
-    const monthStr = months.indexOf(month).toString().padStart(2, '0')
+    const monthStr = MONTHS.indexOf(month).toString().padStart(2, '0')
     const [date, setDate] = useState(20);
     const dateStr = date.toString().padStart(2, '0')
-
     const blockedGrid = blockDates(month, date)
+    // get puzzle solutions
     const solutionList = solve(blockedGrid);
-    console.log(solutionList)
     const [selectedSolution, setSelectedSolution] = useState(0);
 
     useEffect(()=>{
         dispatch(receiveGrid(blockedGrid))
     }, [month, date])
     
+    // update selected date
     const updateDate = (e) => {
         const dateValues = e.target.value.split("-");
-        setMonth(months[parseInt(dateValues[1])]);
+        setMonth(MONTHS[parseInt(dateValues[1])]);
         setDate(parseInt(dateValues[2]));
     }
 
+    // update selected solution to display
     const updateSolution = (e) => {
         setSelectedSolution(e.target.value)
     }
@@ -36,7 +39,9 @@ export default function Puzzle () {
             <label>Date
                 <input type="date" id="start" name="trip-start" value={`2023-${monthStr}-${dateStr}`} min="2023-01-01" max="2023-12-31" onChange={updateDate}/>
             </label>
-            <Calendar grid={gridToCalendar((solutionList?.length ? solutionList[selectedSolution] : grid))}/>
+
+            <Calendar grid={makeCalendar((solutionList?.length ? solutionList[selectedSolution] : grid))}/>
+
             <label>
                 <select name="solutions" onChange={updateSolution}>
                     {solutionList.map((solution, solutionIdx)=> {
@@ -50,18 +55,20 @@ export default function Puzzle () {
     )
 }
 
+// get all solutions for grid with dates blocked
 function solve (grid) {
     const solutions = {0: [grid]};
-    for (let i=0;i<pieces.length;i++) {
-        let currPiece = pieces[i];
+    for (let i=0;i<PIECES.length;i++) {
+        let currPiece = PIECES[i];
         let currSolution = solutions[i][0];
-        let currOptions = getOptions(currPiece, currSolution)
-        if (currOptions.length===0) {
+        let currCoord = getCoordinates(currPiece, currSolution)
+        if (currCoord.length===0) {
             break;
         } else {
             solutions[i+1]=[];
-            for (let j=0; j<currOptions.length; j++) {
-                solutions[i+1].push(place(currPiece, currSolution, currOptions[j]))
+            for (let j=0; j<currCoord.length; j++) {
+                let nextSolution = addPiece(currPiece, currSolution, currCoord[j]);
+                solutions[i+1].push(nextSolution);
             }
         }
         delete solutions[i];
@@ -69,9 +76,10 @@ function solve (grid) {
     return Object.values(solutions)[0]; // index at 0 because values are already arrays
 }
 
-function place (piece, grid, option) {
-    const [row, col] = option;
-    const gridCopy = deepCopy(grid);
+// add piece to grid 
+function addPiece (piece, grid, coord) {
+    const [row, col] = coord;
+    const gridCopy = getDeepCopy(grid);
     for (let pieceRow=0; pieceRow<piece.length; pieceRow++) {
         let projRow = row + pieceRow;
         for (let pieceCol=0; pieceCol<piece[0].length; pieceCol++) {
@@ -84,25 +92,27 @@ function place (piece, grid, option) {
     return gridCopy
 }
 
-function getOptions (piece, grid) {
-    const validOptions = [];
-    for (let row = 0; row < gridSize; row++) {
-        for (let col = 0; col < gridSize; col++) {
-            if (validSpot(piece, grid, row, col)) {
-                validOptions.push([row, col]);
+// get valid coordinates for the specified piece and current grid
+function getCoordinates (piece, grid) {
+    const validCoordinates = [];
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
+            if (checkValidCoordinate(piece, grid, row, col)) {
+                validCoordinates.push([row, col]);
             }
         }
     }
-    return validOptions
+    return validCoordinates
 }
 
-function validSpot (piece, grid, row, col) {
+// check if coordinate pair is valid for specified piece and current grid
+function checkValidCoordinate (piece, grid, row, col) {
     for (let pieceRow=0; pieceRow<piece.length; pieceRow++) {
         let projRow = row + pieceRow;
         for (let pieceCol=0; pieceCol<piece[0].length; pieceCol++) {
             let projCol = col + pieceCol;
             if (piece[pieceRow][pieceCol]>0) {
-                if (projRow >= gridSize || projCol >= gridSize) {
+                if (projRow >= GRID_SIZE || projCol >= GRID_SIZE) {
                     return false;
                 }
                 if (grid[projRow][projCol]>0) {

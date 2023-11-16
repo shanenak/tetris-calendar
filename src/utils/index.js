@@ -2,24 +2,26 @@ import CalendarSquare from "../components/CalendarSquare";
 
 export const defaultState = () => {
     return {
-        grid: defaultGrid(),
+        grid: getDefaultGrid(),
         shapeId: 0,
         x: 0,
         y: 0,
     }
 }
 
-export const gridToCalendar = (grid) => {
+// convert grid values to calendar tile component
+export const makeCalendar = (grid) => {
     const calendarTiles = [...Array(7)].map(e => Array(7));
-    for (let row = 0; row < gridSize; row++) {
-        for (let col = 0; col < gridSize; col++) {
-            calendarTiles[row][col] = <CalendarSquare color={grid[row][col].toString()} label={tiles[(row * 7) + col]} key={`row${row}-col${col}`} />
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
+            calendarTiles[row][col] = <CalendarSquare color={grid[row][col].toString()} label={TILES[(row * 7) + col]} key={`row${row}-col${col}`} />
         }
     }
     return calendarTiles
 }
 
-export const defaultGrid = () => {
+// create default grid
+export const getDefaultGrid = () => {
     const grid = [...Array(7)].map(e => Array(7).fill(0));
     // remove empty calendar squares from grid
     grid[0][6] = 10;
@@ -31,36 +33,38 @@ export const defaultGrid = () => {
     return grid
 }
 
-export const deepCopy = (grid) => {
+// create deep copy of nested arrays
+export const getDeepCopy = (grid) => {
     const deepCopy = [...Array(7)].map(e => Array(7).fill(0));
-    for (let row = 0; row < gridSize; row++) {
-        for (let col = 0; col < gridSize; col++) {
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
             deepCopy[row][col] = grid[row][col]
         }
     }
     return deepCopy
 }
 
+// update values for selected date so no piece can be placed there
 export function blockDates(month, date) {
-    const grid = defaultGrid();
+    const grid = getDefaultGrid();
 
-    const monthRow = Math.floor(tiles.indexOf(month) / 7);
-    const monthCol = tiles.indexOf(month) % 7;
-    const dateRow = Math.floor(tiles.indexOf(date) / 7);
-    const dateCol = tiles.indexOf(date) % 7;
+    const monthRow = Math.floor(TILES.indexOf(month) / 7);
+    const monthCol = TILES.indexOf(month) % 7;
+    const dateRow = Math.floor(TILES.indexOf(date) / 7);
+    const dateCol = TILES.indexOf(date) % 7;
 
-    grid[monthRow][monthCol] = 9
-    grid[dateRow][dateCol] = 9
+    grid[monthRow][monthCol] = 9;
+    grid[dateRow][dateCol] = 9;
     return grid
 }
 
-export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', '', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ''];
-export const days = [...Array(31).keys()].map(ele => ele + 1);
-export const tiles = months.concat(days);
+export const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', '', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ''];
+export const DAYS = [...Array(31).keys()].map(ele => ele + 1);
+export const TILES = MONTHS.concat(DAYS);
 
-export const gridSize = 7;
+export const GRID_SIZE = 7;
 
-export const pieces = [
+export const PIECES = [
     [
         [1, 0],
         [1, 1],
