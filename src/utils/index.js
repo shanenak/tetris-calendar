@@ -58,6 +58,27 @@ export function blockDates(month, date) {
     return grid
 }
 
+export function getRotatedPieces(piece) {
+    const rotatedPieces = [piece]
+    for (let i = 0; i < 3; i++) {
+        rotatedPieces.push(rotate(piece))
+    }
+    const uniqueRotatedPieces = [...new Set(rotatedPieces)]
+    return uniqueRotatedPieces
+}
+
+function rotate(piece) {
+    const numRows = piece.length;
+    const numCols = piece[0].length
+    const rotated = [...Array(numCols)].map(e => Array(numRows).fill(0));
+    for (let row=0; row<numRows; row++) {
+        for (let col=0; col<numCols; col++) {
+            rotated[col][row] = piece[row][col]
+        }
+    }
+    return rotated
+}
+
 export const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', '', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ''];
 export const DAYS = [...Array(31).keys()].map(ele => ele + 1);
 export const TILES = MONTHS.concat(DAYS);

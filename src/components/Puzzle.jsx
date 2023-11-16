@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Calendar from "./Calendar";
 import { useEffect, useState } from "react";
-import { blockDates, MONTHS, GRID_SIZE, PIECES, makeCalendar, getDeepCopy } from "../utils";
+import { blockDates, MONTHS, GRID_SIZE, PIECES, makeCalendar, getDeepCopy, getRotatedPieces } from "../utils";
 import { receiveGrid } from "../actions";
 
 export default function Puzzle () {
@@ -58,20 +58,32 @@ export default function Puzzle () {
 // get all solutions for grid with dates blocked
 function solve (grid) {
     const solutions = {0: [grid]};
-    for (let i=0;i<PIECES.length;i++) {
-        let currPiece = PIECES[i];
-        let currSolution = solutions[i][0];
-        let currCoord = getCoordinates(currPiece, currSolution)
-        if (currCoord.length===0) {
-            break;
-        } else {
-            solutions[i+1]=[];
-            for (let j=0; j<currCoord.length; j++) {
-                let nextSolution = addPiece(currPiece, currSolution, currCoord[j]);
-                solutions[i+1].push(nextSolution);
+    for (let i=0; i<PIECES.length; i++) {
+        solutions[i+1]=[];
+        const rotatedPieces = getRotatedPieces(PIECES[i]);
+        for (let j=0; j<rotatedPieces.length; j++) {
+            let currPiece = rotatedPieces[j];
+            console.log(solutions)
+            for (let solIdx=0; solIdx<solutions[i].length; solIdx++) {
+                let currSolution = solutions[i][solIdx];
+                let currCoord = getCoordinates(currPiece, currSolution)
+                if (currCoord?.length>0) {
+                    // if there are no options for the current piece to be placed, try next
+                    for (let j=0; j<currCoord.length; j++) {
+                        let nextSolution = addPiece(currPiece, currSolution, currCoord[j]);
+                        solutions[i+1].push(nextSolution);
+                    }
+                }
             }
         }
-        delete solutions[i];
+        if (solutions[i+1].length>0) {
+            // if continuing, remove the outdated solutions (before the current piece has been placed)
+            delete solutions[i];
+        } else {
+            // if cannot progress, remove next key/value pair and break
+            delete solutions[i+1];
+            break;
+        }
     }
     return Object.values(solutions)[0]; // index at 0 because values are already arrays
 }
