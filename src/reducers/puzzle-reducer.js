@@ -1,8 +1,9 @@
 import {
     MOVE_RIGHT, MOVE_LEFT, MOVE_DOWN, ROTATE
 } from '../actions'
+import { defaultState } from '../utils';
 
-const puzzleReducer = (state = {}, action) => {
+const puzzleReducer = (state = defaultState(), action) => {
 
     switch (action.type) {
         case MOVE_RIGHT:
