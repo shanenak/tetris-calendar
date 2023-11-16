@@ -9,15 +9,29 @@ export const defaultState = () => {
     }
 }
 
-export const defaultGrid = () => {
-    const grid = [...Array(7)].map(e => Array(7));
-
+export const gridToCalendar = (grid) => {
+    const calendarTiles = [...Array(7)].map(e => Array(7));
     for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
-            grid[row][col] = <CalendarSquare color='0' label={tiles[(row * 7) + col]} key={`row${row}-col${col}`}/>
+            calendarTiles[row][col] = <CalendarSquare color={grid[row][col].toString()} label={tiles[(row * 7) + col]} key={`row${row}-col${col}`} />
         }
     }
+    return calendarTiles
+}
+
+export const defaultGrid = () => {
+    const grid = [...Array(7)].map(e => Array(7).fill(0));
     return grid
+}
+
+export const deepCopy = (grid) => {
+    const deepCopy = [...Array(7)].map(e => Array(7).fill(0));
+    for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+            deepCopy[row][col] = grid[row][col]
+        }
+    }
+    return deepCopy
 }
 
 export function blockDates(month, date) {
@@ -28,8 +42,8 @@ export function blockDates(month, date) {
     const dateRow = Math.floor(tiles.indexOf(date) / 7);
     const dateCol = tiles.indexOf(date) % 7;
 
-    grid[monthRow][monthCol] = <CalendarSquare color='9' label={month} key={`row${monthRow}-col${monthCol}`}/>
-    grid[dateRow][dateCol] = <CalendarSquare color='9' label={date} key={`row${dateRow}-col${dateCol}`} />
+    grid[monthRow][monthCol] = 9
+    grid[dateRow][dateCol] = 9
     return grid
 }
 
