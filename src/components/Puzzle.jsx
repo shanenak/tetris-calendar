@@ -74,13 +74,15 @@ function solve (grid) {
 function place (piece, grid, option) {
     const [row, col] = option;
     const gridCopy = deepCopy(grid);
-    piece.forEach((pieceRow, rowIdx)=>{
-        let projRow = rowIdx + row;
-        pieceRow.forEach((colValue, colIdx) => {
-            let projCol = colIdx + col;
-            gridCopy[projRow][projCol] = colValue;
-        })
-    })
+    for (let pieceRow=0; pieceRow<piece.length; pieceRow++) {
+        let projRow = row + pieceRow;
+        for (let pieceCol=0; pieceCol<piece[0].length; pieceCol++) {
+            let projCol = col + pieceCol;
+            if (piece[pieceRow][pieceCol]>0) {
+                gridCopy[projRow][projCol] = piece[pieceRow][pieceCol];
+            }
+        }
+    }
     return gridCopy
 }
 
