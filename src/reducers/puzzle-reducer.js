@@ -1,11 +1,11 @@
 import {
     RECEIVE_GRID, RECEIVE_SCORE, RECEIVE_SOLUTIONS, receiveScore, receiveSolutions
 } from '../actions'
-import { solve } from '../components/Puzzle';
+import { attemptSolves } from '../components/Puzzle';
 import { defaultState } from '../utils';
 
 export const getSolutions = (grid) => async (dispatch) => {
-    const solutions = await solve(grid);
+    const solutions = await attemptSolves(grid);
     const numPiecesPlaced = Object.keys(solutions);
     const solutionList = Object.values(solutions)[0];
     if (solutionList?.length>0) {

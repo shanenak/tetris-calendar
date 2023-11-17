@@ -55,7 +55,7 @@ export default function Puzzle () {
                 <select name="solutions" onChange={updateSolution}>
                     {solutionList.map((solution, solutionIdx)=> {
                         return (
-                            <option value={solutionIdx}>{solutionIdx+1}</option>
+                            <option value={solutionIdx} key={solution}>{solutionIdx+1}</option>
                         )
                     })}
                 </select>
@@ -64,24 +64,40 @@ export default function Puzzle () {
     )
 }
 
-// get all solutions for grid with dates blocked
-export function solve (grid) {
-    const solutions = {0: [grid]};
+export function attemptSolves (grid) {
+    let numPiecesPlaced = 0;
+    let attempt = 0;
+    let solutions;
+    const numAttempts = 10;
+    while ((attempt < numAttempts) && (numPiecesPlaced<8)) {
+        let randomizedPieces = PIECES.sort(() => Math.random() - 0.5);
+        solutions = solve(grid, randomizedPieces);
+        numPiecesPlaced = Object.keys(solutions);
+        attempt ++
+    }
+    return solutions
+}
 
-    for (let i=0; i<PIECES.length; i++) {
+// get all solutions for grid with dates blocked
+function solve (grid, randomizedPieces) {
+    const solutions = {0: [grid]};
+    // for each of the 8 pieces
+    for (let i=0; i<randomizedPieces.length; i++) {
         solutions[i+1]=[];
-        const rotatedPieces = getRotatedPieces(PIECES[i]);
+        const rotatedPieces = randomizedPieces[i];
         for (let j=0; j<rotatedPieces.length; j++) {
             let currPiece = rotatedPieces[j];
-            // limit to only 10,000 solutions being considered at a time to reduce loading time
-            // increasing to 40,000 didn't seem to impact results much
-            const maxSolutions = Math.min(solutions[i]?.length, 10000)
+            // build upon the options for the previous piece, returning solutions with the current piece placed
+            // limit to only 5,000 solutions being considered at a time to reduce loading time
+            const maxSolutions = Math.min(solutions[i]?.length, 5000)
             for (let solIdx=0; solIdx<maxSolutions; solIdx++) {
                 let currSolution = solutions[i][solIdx];
+                // for the current in progress solution/option, get all possible coordinates for the current piece to be placed
                 let currCoord = getCoordinates(currPiece, currSolution)
                 if (currCoord?.length>0) {
                     // if there are no options for the current piece to be placed, try next
                     for (let j=0; j<currCoord.length; j++) {
+                        // store all solutions where the current piece has been placed
                         let nextSolution = addPiece(currPiece, currSolution, currCoord[j]);
                         solutions[i+1].push(nextSolution);
                     }
