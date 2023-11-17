@@ -3,9 +3,8 @@ import CalendarSquare from "../components/CalendarSquare";
 export const defaultState = () => {
     return {
         grid: getDefaultGrid(),
-        shapeId: 0,
-        x: 0,
-        y: 0,
+        solutions: [],
+        score: 0
     }
 }
 
@@ -126,4 +125,16 @@ export const PIECES = [
         [0, 8],
         [0, 8]
     ]
+]
+
+export const MESSAGES = [
+    "No blocks were placed",
+    "Only one block could be placed",
+    "Two blocks were placed",
+    "Three blocks were placed",
+    "Only half of the blocks could be placed",
+    "Five of the eight blocks could be placed",
+    "Six of the eight blocks could be placed for this date",
+    "Seven of eight blocks could be placed. So close!",
+    "Woohoo! All eight blocks could be placed."
 ]

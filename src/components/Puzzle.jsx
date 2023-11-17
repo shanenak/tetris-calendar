@@ -1,25 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
 import Calendar from "./Calendar";
 import { useEffect, useState } from "react";
-import { blockDates, MONTHS, GRID_SIZE, PIECES, makeCalendar, getDeepCopy, getRotatedPieces } from "../utils";
+import { blockDates, MONTHS, GRID_SIZE, PIECES, makeCalendar, getDeepCopy, getRotatedPieces, MESSAGES } from "../utils";
 import { receiveGrid } from "../actions";
+import { getSolutions } from "../reducers/puzzle-reducer";
 
 export default function Puzzle () {
-    let grid = useSelector((state)=> state.puzzle.grid)
+    const solutionList = useSelector((state)=> state.puzzle.solutions)
+    const score = useSelector((state)=> state.puzzle.score)
     const dispatch = useDispatch();
-
     // set date
     const [month, setMonth] = useState('Nov');
     const monthStr = MONTHS.indexOf(month).toString().padStart(2, '0')
     const [date, setDate] = useState(20);
     const dateStr = date.toString().padStart(2, '0')
     const blockedGrid = blockDates(month, date)
-    // get puzzle solutions
-    const solutionList = solve(blockedGrid);
     const [selectedSolution, setSelectedSolution] = useState(0);
 
     useEffect(()=>{
         dispatch(receiveGrid(blockedGrid))
+        dispatch(getSolutions(blockedGrid))
     }, [month, date])
     
     // update selected date
@@ -33,15 +33,16 @@ export default function Puzzle () {
     const updateSolution = (e) => {
         setSelectedSolution(e.target.value)
     }
-
+    
     return (
         <div>
             <label>Date
                 <input type="date" id="start" name="trip-start" value={`2023-${monthStr}-${dateStr}`} min="2023-01-01" max="2023-12-31" onChange={updateDate}/>
             </label>
 
-            <Calendar grid={makeCalendar((solutionList?.length ? solutionList[selectedSolution] : grid))}/>
+            <Calendar grid={makeCalendar((solutionList?.length ? solutionList[selectedSolution] : blockedGrid))}/>
 
+            <h3>{MESSAGES[parseInt(score)]}</h3>
             <label>
                 <select name="solutions" onChange={updateSolution}>
                     {solutionList.map((solution, solutionIdx)=> {
@@ -56,15 +57,18 @@ export default function Puzzle () {
 }
 
 // get all solutions for grid with dates blocked
-function solve (grid) {
+export function solve (grid) {
     const solutions = {0: [grid]};
+
     for (let i=0; i<PIECES.length; i++) {
         solutions[i+1]=[];
         const rotatedPieces = getRotatedPieces(PIECES[i]);
         for (let j=0; j<rotatedPieces.length; j++) {
             let currPiece = rotatedPieces[j];
-            console.log(solutions)
-            for (let solIdx=0; solIdx<solutions[i].length; solIdx++) {
+            // limit to only 10,000 solutions being considered at a time to reduce loading time
+            // increasing to 40,000 didn't seem to impact results much
+            const maxSolutions = Math.min(solutions[i]?.length, 10000)
+            for (let solIdx=0; solIdx<maxSolutions; solIdx++) {
                 let currSolution = solutions[i][solIdx];
                 let currCoord = getCoordinates(currPiece, currSolution)
                 if (currCoord?.length>0) {
@@ -84,8 +88,9 @@ function solve (grid) {
             delete solutions[i+1];
             break;
         }
+        
     }
-    return Object.values(solutions)[0]; // index at 0 because values are already arrays
+    return solutions; // index at 0 because values are already arrays
 }
 
 // add piece to grid 
