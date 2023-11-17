@@ -3,6 +3,7 @@
     border-style: solid;
     border-color: var(--border-color);
     color: black;
+    border-radius: 4px;
 }
 
 .grid-container {
@@ -10,6 +11,7 @@
     width: fit-content;
     padding: 20px;
     background-color: var(--main-bg-color);
+    border-radius: 5px;
 }
 
 .grid-squares {

@@ -43,7 +43,7 @@ export default function Puzzle () {
                 </a>
             </div>
             <h1>Tetris Calendar</h1>
-            <h3>Browse the solutions where pieces have been placed to leave the given day uncovered.</h3>
+            <p className='description'>Tetris pieces have been placed to reveal the selected day. Browse the best solutions for each calendar date.</p>
             <label className='input-label'>Date
                 <input type="date" id="start" name="trip-start" value={`2023-${monthStr}-${dateStr}`} min="2023-01-01" max="2023-12-31" onChange={updateDate}/>
             </label>

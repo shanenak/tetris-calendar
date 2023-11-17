@@ -23,11 +23,24 @@ i {
     padding: 25px;
 }
 
-h3 {
-    margin: 10px;
+h1 {
+    text-transform: uppercase;
+    letter-spacing: 0.03rem;
+    font-weight: 400;
+    margin: 20px 20px 20px 20px ;
 }
 
+.description {
+    width: 60%;
+    text-align: center;
+    margin: 0 0 20px 0;
+ }
 
+h3 {
+    font-weight: 400;
+    margin: 10px;
+    letter-spacing: 0.03rem;
+}
 
 input, select {
     padding: 5px;
