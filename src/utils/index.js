@@ -65,7 +65,6 @@ export function blockDates(month, date) {
 //         currRotation = rotate(currRotation);
 //         rotatedPieces.push(currRotation)
 //     }
-//     console.log('total', rotatedPieces)
 //     const uniqueRotatedPieces = rotatedPieces.slice(0, 2);
 //     if (!checkNestedArrayEquality(rotatedPieces[0], rotatedPieces[2])) {
 //         uniqueRotatedPieces.push(rotatedPieces[2])
@@ -73,7 +72,6 @@ export function blockDates(month, date) {
 //     if (!checkNestedArrayEquality(rotatedPieces[1], rotatedPieces[3])) {
 //         uniqueRotatedPieces.push(rotatedPieces[3])
 //     }
-//     console.log('unique',uniqueRotatedPieces)
 //     return uniqueRotatedPieces
 // }
 

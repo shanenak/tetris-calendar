@@ -13,7 +13,7 @@ The original prompt is described [here](https://paper.dropbox.com/doc/Basil-Fron
 
 ## Implementation
 
-This quick implementation was built with React.js, Redux, and JavaScript. Efficiency was the main constraint and was not fully optimized within the short development time frame. Currently, most dates do not result in a true solution to the problem as they are missing one or two of the tetris pieces. Further study will be done to increase performance and effectiveness and reduce latency. 
+This quick implementation was built with React.js, Redux, and JavaScript. Efficiency was the main constraint and was not fully optimized within the short development time frame. Currently, some dates do not result in a true solution to the problem as they are missing one or two of the tetris pieces. Additionally, a calculation limit is placed, so not all solutions are generated. Further study will be done to increase performance and effectiveness and reduce latency. 
 
 
 
