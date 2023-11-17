@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/tetris-calendar/static/css/main.405f8670.css",
-    "main.js": "/tetris-calendar/static/js/main.a7277bbd.js",
+    "main.css": "/tetris-calendar/static/css/main.2a6e4fb9.css",
+    "main.js": "/tetris-calendar/static/js/main.5702ab20.js",
     "index.html": "/tetris-calendar/index.html",
-    "main.405f8670.css.map": "/tetris-calendar/static/css/main.405f8670.css.map",
-    "main.a7277bbd.js.map": "/tetris-calendar/static/js/main.a7277bbd.js.map"
+    "main.2a6e4fb9.css.map": "/tetris-calendar/static/css/main.2a6e4fb9.css.map",
+    "main.5702ab20.js.map": "/tetris-calendar/static/js/main.5702ab20.js.map"
   },
   "entrypoints": [
-    "static/css/main.405f8670.css",
-    "static/js/main.a7277bbd.js"
+    "static/css/main.2a6e4fb9.css",
+    "static/js/main.5702ab20.js"
   ]
 }
