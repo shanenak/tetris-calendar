@@ -3,7 +3,7 @@
     /* color for tiles not yet assigned */
     --color-0: #FFEBC2;
     /* colors are shape specific (identified by number) */
-    --color-1: #1E1EF0;
+    --color-1: #6666F4;
     --color-2: #F15025;
     --color-3: #B2B2FA;
     --color-4: #93C48B;
@@ -12,7 +12,7 @@
     --color-7: #55954B;
     --color-8: #FFC145;
     /* color for selected dates */
-    --color-9: gray; 
+    --color-9: #38423E; 
     /* color for empty tiles on calendar */
     --color-10: #FFF8EB;
     --border-color: #FFF8EB;
@@ -25,8 +25,5 @@
 
 * {
     box-sizing: border-box;
-}
-
-body {
-    background-color: var(--main-bg-color);
+    font-family: 'Dosis', sans-serif;
 }

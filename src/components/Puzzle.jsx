@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { blockDates, MONTHS, GRID_SIZE, PIECES, makeCalendar, getDeepCopy, getRotatedPieces, MESSAGES } from "../utils";
 import { receiveGrid } from "../actions";
 import { getSolutions } from "../reducers/puzzle-reducer";
+import './Puzzle.css'
 
 export default function Puzzle () {
     const solutionList = useSelector((state)=> state.puzzle.solutions)
@@ -35,15 +36,17 @@ export default function Puzzle () {
     }
     
     return (
-        <div>
-            <label>Date
+        <div className='puzzle'>
+            <h1>Tetris Calendar</h1>
+            <h3>Browse the solutions where pieces have been placed to leave the given day uncovered.</h3>
+            <label className='input-label'>Date
                 <input type="date" id="start" name="trip-start" value={`2023-${monthStr}-${dateStr}`} min="2023-01-01" max="2023-12-31" onChange={updateDate}/>
             </label>
 
             <Calendar grid={makeCalendar((solutionList?.length ? solutionList[selectedSolution] : blockedGrid))}/>
 
             <h3>{MESSAGES[parseInt(score)]}</h3>
-            <label>
+            <label className='input-label'>Solutions
                 <select name="solutions" onChange={updateSolution}>
                     {solutionList.map((solution, solutionIdx)=> {
                         return (
