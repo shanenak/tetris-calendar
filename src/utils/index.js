@@ -57,26 +57,48 @@ export function blockDates(month, date) {
     return grid
 }
 
-export function getRotatedPieces(piece) {
-    const rotatedPieces = [piece]
-    for (let i = 0; i < 3; i++) {
-        rotatedPieces.push(rotate(piece))
-    }
-    const uniqueRotatedPieces = [...new Set(rotatedPieces)]
-    return uniqueRotatedPieces
-}
+//// TODO: when rotating, additional rows and columns are added to make shapes square. remove extra or fix code to accommodate placement 
+// export function getRotatedPieces(piece) {
+//     let currRotation = piece;
+//     const rotatedPieces = [currRotation];
+//     for (let i = 0; i < 3; i++) {
+//         currRotation = rotate(currRotation);
+//         rotatedPieces.push(currRotation)
+//     }
+//     console.log('total', rotatedPieces)
+//     const uniqueRotatedPieces = rotatedPieces.slice(0, 2);
+//     if (!checkNestedArrayEquality(rotatedPieces[0], rotatedPieces[2])) {
+//         uniqueRotatedPieces.push(rotatedPieces[2])
+//     } 
+//     if (!checkNestedArrayEquality(rotatedPieces[1], rotatedPieces[3])) {
+//         uniqueRotatedPieces.push(rotatedPieces[3])
+//     }
+//     console.log('unique',uniqueRotatedPieces)
+//     return uniqueRotatedPieces
+// }
 
-function rotate(piece) {
-    const numRows = piece.length;
-    const numCols = piece[0].length
-    const rotated = [...Array(numCols)].map(e => Array(numRows).fill(0));
-    for (let row=0; row<numRows; row++) {
-        for (let col=0; col<numCols; col++) {
-            rotated[col][row] = piece[row][col]
-        }
-    }
-    return rotated
-}
+// function rotate(piece) {
+//     const numRows = piece.length;
+//     const numCols = piece[0].length
+//     const rotated = [...Array(numCols)].map(e => Array(numRows).fill(0));
+//     for (let row=0; row<numRows; row++) {
+//         for (let col=0; col<numCols; col++) {
+//             rotated[col][numCols-row] = piece[row][col]
+//         }
+//     }
+//     return rotated
+// }
+
+// function checkNestedArrayEquality(a, b) {
+//     for (let row=0; row<a.length; row++) {
+//         for (let col=0; col<a[0].length; col++) {
+//             if (a[row][col]!==b[row][col]) {
+//                 return false
+//             }
+//         }
+//     }
+//     return true
+// }
 
 export const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', '', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ''];
 export const DAYS = [...Array(31).keys()].map(ele => ele + 1);
@@ -86,44 +108,155 @@ export const GRID_SIZE = 7;
 
 export const PIECES = [
     [
-        [1, 0],
-        [1, 1],
-        [1, 1]
+        [
+            [1, 0],
+            [1, 1],
+            [1, 1]
+        ],
+        [
+            [1, 1, 1],
+            [1, 1, 0]
+        ],
+        [
+            [1, 1],
+            [1, 1],
+            [0, 1]
+        ],
+        [
+            [0, 1, 1],
+            [1, 1, 1]
+        ]
     ],
     [
-        [2, 2],
-        [2, 2],
-        [2, 2]
+        [
+            [2, 2],
+            [2, 2],
+            [2, 2]
+        ],
+        [
+            [2, 2, 2],
+            [2, 2, 2]
+        ]
     ],
     [
-        [0, 0, 3, 3],
-        [3, 3, 3, 0],
+        [
+            [0, 0, 3, 3],
+            [3, 3, 3, 0]
+        ],
+        [
+            [3, 0],
+            [3, 0],
+            [3, 3],
+            [0, 3]
+        ], 
+        [
+            [0, 3, 3, 3],
+            [3, 3, 0, 0]
+        ],
+        [
+            [3, 0],
+            [3, 3],
+            [0, 3],
+            [0, 3]
+        ]
     ],
     [
-        [4, 4, 4],
-        [0, 0, 4],
-        [0, 0, 4]
+        [
+            [4, 4, 4],
+            [0, 0, 4],
+            [0, 0, 4]
+        ],
+        [
+            [0, 0, 4],
+            [0, 0, 4],
+            [4, 4, 4]
+        ],
+        [
+            [4, 0, 0],
+            [4, 0, 0],
+            [4, 4, 4]
+        ],
+        [
+            [4, 4, 4],
+            [4, 0, 0],
+            [4, 0, 0]
+        ]
     ],
     [
-        [5, 0],
-        [5, 0],
-        [5, 0],
-        [5, 5]
+        [
+            [5, 5, 5, 5],
+            [5, 0, 0, 0]
+        ],
+        [
+            [5, 5],
+            [0, 5],
+            [0, 5],
+            [0, 5]
+        ],
+        [
+            [0, 0, 0, 5],
+            [5, 5, 5, 5]
+        ],
+        [
+            [5, 0],
+            [5, 0],
+            [5, 0],
+            [5, 5]
+        ]
     ],
     [
-        [6, 0, 6],
-        [6, 6, 6]
+        [
+            [6, 0, 6],
+            [6, 6, 6]
+        ],
+        [
+            [6, 6],
+            [6, 0],
+            [6, 6]
+        ],
+        [
+            [6, 6, 6],
+            [6, 0, 6]
+        ],
+        [
+            [6, 6],
+            [0, 6],
+            [6, 6]
+        ]
     ],
     [
-        [7, 7, 0],
-        [0, 7, 0],
-        [0, 7, 7]
+        [
+            [7, 7, 0],
+            [0, 7, 0],
+            [0, 7, 7]
+        ],
+        [
+            [0, 0, 7],
+            [7, 7, 7],
+            [7, 0, 0]
+        ]
     ],
     [
-        [0, 8],
-        [8, 8],
-        [0, 8],
-        [0, 8]
+        [
+            [0, 8],
+            [8, 8],
+            [0, 8],
+            [0, 8]
+        ],
+        [
+            [0, 0, 8, 0],
+            [8, 8, 8, 8]
+        ],
+        [
+            [8, 0],
+            [8, 0],
+            [8, 8],
+            [8, 0]
+        ],
+        [
+            [8, 8, 8, 8],
+            [0, 8, 0, 0]
+        ]
     ]
 ]
 
