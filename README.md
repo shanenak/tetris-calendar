@@ -1,70 +1,22 @@
-# Getting Started with Create React App
+# Tetris Calendar
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Visit the live site [here]()
 
-## Available Scripts
+This website was built for the prompt described [here](https://paper.dropbox.com/doc/Basil-Front-End-Engineer-Interview-Question-o57ODZrRicGSpizdYsU3z).
 
-In the project directory, you can run:
+## Task
 
-### `npm start`
+Input: a month and a day (e.g. November 20)
+Output: visually generate all possible solutions for that date. A “solution” is a tiling of all the pieces such that only the given day is uncovered.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+![Task](https://ucbc29ceb74fc01b5b287a5ecd8c.previews.dropboxusercontent.com/p/thumb/ACEw7zBGCzDQMgf7QQXcLhUKZVL4xgtSqdtYwTNTSkL0Bq-PX_FoSliVmyH8KSg8UUxNdZjq4ldbAfbVnQHoIDiHeoIyq8oUtm7gEIvth6PNxalLxrAQhPCI-ZAZiSa195IGOSLLYQA03HPMB3kqRKyZqdBYQj43IDpYkj8LOpZrEHIf5e_onPc2hEyuVvg6UXMVoQNq82YRi5HdmM58f7uus0KZw812a6M2bzgPdaEBU5X-UpnA0B69cdKY9h6pvUF6S9-sRWZMcdlEIkKFkHoTM9ZOnxkZzO_88Trr75ZoMyaacV3JNyqQhCbY7vxegyLsg6hWz__NDo_T-mo23hqd_Fhw_woME1FFo6V9tO7a3ev2y03xvsvNjoLp7VWyZtJ-1dYoMb4bHftg4byS1LMH/p.png)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Another example is provided [here](https://www.dropbox.com/scl/fi/n01ir0xexx85ub7uiuvhm/Screen-Recording-2023-09-15-at-18.08.34.mov?rlkey=iu4m56w3agfxcblhd7pfqmayx&dl=0)
 
-### `npm test`
+## Implementation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This quick implementation was built with React.js, Redux, and JavaScript. Efficiency was the main constraint and was not fully optimized within the short time frame. Currently, most dates do not result in a true solution to the problem as they are missing oen or two of the tetris pieces. Further study will be done to increase performance and effectiveness and reduce latency. 
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
