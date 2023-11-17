@@ -37,6 +37,11 @@ export default function Puzzle () {
     
     return (
         <div className='puzzle'>
+            <div className='header'>
+                <a href="https://github.com/shanenak/tetris-calendar">
+                    <i className="fa-brands fa-square-github"></i>
+                </a>
+            </div>
             <h1>Tetris Calendar</h1>
             <h3>Browse the solutions where pieces have been placed to leave the given day uncovered.</h3>
             <label className='input-label'>Date

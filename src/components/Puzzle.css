@@ -5,7 +5,29 @@
     background-color: #000;
     height: 100vh;
     color: white;
+    font-family: 'Dosis', sans-serif;
 }
+
+.header {
+    position: absolute;
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+i {
+    position: relative;
+    color: white;
+    font-size: 28px;
+    padding: 25px;
+}
+
+h3 {
+    margin: 10px;
+}
+
+
 
 input, select {
     padding: 5px;
