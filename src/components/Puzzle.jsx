@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import Calendar from "./Calendar";
 import { useEffect, useState } from "react";
-import { blockDates, MONTHS_WITH_GAPS, MONTHS_ONLY, GRID_SIZE, PIECES, makeCalendar, getDeepCopy, getRotatedPieces, MESSAGES } from "../utils";
+import { blockDates, MONTHS_ONLY, GRID_SIZE, PIECES, makeCalendar, getDeepCopy} from "../utils";
 import { receiveGrid } from "../actions";
 import { getSolutions } from "../reducers/puzzle-reducer";
 import './Puzzle.css'
 
 export default function Puzzle () {
     const solutionList = useSelector((state)=> state.puzzle.solutions)
-    console.log('solution list', solutionList)
-    const score = useSelector((state)=> state.puzzle.score)
     const dispatch = useDispatch();
     // set date
     const [month, setMonth] = useState('Nov');
@@ -51,7 +49,6 @@ export default function Puzzle () {
 
             <Calendar grid={makeCalendar((solutionList?.length ? solutionList[selectedSolution] : blockedGrid))}/>
 
-            {/* <h3>{MESSAGES[parseInt(score)]}</h3> */}
             <label className='input-label'>Solutions
                 <select name="solutions" onChange={updateSolution}>
                     {solutionList.map((solution, solutionIdx)=> {
@@ -66,12 +63,13 @@ export default function Puzzle () {
 }
 
 export function attemptSolves (grid) {
+    // TODO: check optimal order of pieces, for now order is randomized
     let randomizedPieces = PIECES.sort(() => Math.random() - 0.5);
     let temp = solve(grid, randomizedPieces, 0);
     return {8: temp}
 }
 
-// get all solutions for grid with dates blocked
+// recursively get solutions for selected piece and grid with dates blocked
 function solve (grid, randomizedPieces, i) {
     const rotatedPieces = randomizedPieces[i];
     if (i>PIECES.length-1){
@@ -103,7 +101,7 @@ function addPiece (piece, grid, coord) {
     return gridCopy
 }
 
-// get valid coordinates for the specified piece and current grid
+// get valid coordinates for the specified piece and corresponding next grids
 function getNextGrids (piece, grid) {
     const nextGrids = [];
     let next;
