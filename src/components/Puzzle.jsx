@@ -69,7 +69,7 @@ export function attemptSolves (grid) {
     let numPiecesPlaced = 0;
     let attempt = 0;
     let solutions;
-    const numAttempts = 3;
+    const numAttempts = 1;
     while ((attempt < numAttempts) && (numPiecesPlaced<8)) {
         let randomizedPieces = PIECES.sort(() => Math.random() - 0.5);
         let temp = solve(grid, randomizedPieces, 0);
@@ -83,17 +83,17 @@ export function attemptSolves (grid) {
 // get all solutions for grid with dates blocked
 function solve (grid, randomizedPieces, i) {
     const rotatedPieces = randomizedPieces[i];
-    console.log('starting with ',8-i, grid)
-    if (i>=PIECES.length-1){
+    // console.log('starting with ',8-i, grid)
+    if (i>PIECES.length-1){
         console.log('found all of them!!')
         return [grid]
     } 
     let res =[];
     for (let currPiece of rotatedPieces) {
-        console.log('currpiece', currPiece)
+        // console.log('currpiece', currPiece)
         let coordOptions = getCoordinates(currPiece, grid);
         for (let option of coordOptions) {
-            console.log('trying with option', option);
+            // console.log('trying with option', option);
             let nextGrid = addPiece(currPiece, grid, option);
             let nextSol = solve(nextGrid, randomizedPieces, i+1)
             res = res.concat(nextSol)
@@ -138,7 +138,6 @@ function checkValidCoordinate (piece, grid, row, col) {
         let projRow = row + pieceRow;
         if (row>0 && row < GRID_SIZE && grid[row].every(ele=> ele===0)) {
             // if that row is completely empty, start filling horizontally first
-            console.log('empty row', row, grid[row])
             return false;
         }
         for (let pieceCol=0; pieceCol<piece[0].length; pieceCol++) {
