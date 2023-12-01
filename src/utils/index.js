@@ -102,9 +102,10 @@ export function blockDates(month, date) {
 //     return true
 // }
 
-export const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', '', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ''];
+export const MONTHS_WITH_GAPS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', '', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', ''];
+export const MONTHS_ONLY = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const DAYS = [...Array(31).keys()].map(ele => ele + 1);
-export const TILES = MONTHS.concat(DAYS);
+export const TILES = MONTHS_WITH_GAPS.concat(DAYS);
 
 export const GRID_SIZE = 7;
 

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Calendar from "./Calendar";
 import { useEffect, useState } from "react";
-import { blockDates, MONTHS, GRID_SIZE, PIECES, makeCalendar, getDeepCopy, getRotatedPieces, MESSAGES } from "../utils";
+import { blockDates, MONTHS_WITH_GAPS, MONTHS_ONLY, GRID_SIZE, PIECES, makeCalendar, getDeepCopy, getRotatedPieces, MESSAGES } from "../utils";
 import { receiveGrid } from "../actions";
 import { getSolutions } from "../reducers/puzzle-reducer";
 import './Puzzle.css'
@@ -13,7 +13,7 @@ export default function Puzzle () {
     const dispatch = useDispatch();
     // set date
     const [month, setMonth] = useState('Nov');
-    const monthStr = MONTHS.indexOf(month).toString().padStart(2, '0')
+    const monthStr = MONTHS_ONLY.indexOf(month).toString().padStart(2, '0')
     const [date, setDate] = useState(20);
     const dateStr = date.toString().padStart(2, '0')
     const blockedGrid = blockDates(month, date)
@@ -27,7 +27,7 @@ export default function Puzzle () {
     // update selected date
     const updateDate = (e) => {
         const dateValues = e.target.value.split("-");
-        setMonth(MONTHS[parseInt(dateValues[1])]);
+        setMonth(MONTHS_ONLY[parseInt(dateValues[1])]);
         setDate(parseInt(dateValues[2]));
     }
 
@@ -51,7 +51,7 @@ export default function Puzzle () {
 
             <Calendar grid={makeCalendar((solutionList?.length ? solutionList[selectedSolution] : blockedGrid))}/>
 
-            <h3>{MESSAGES[parseInt(score)]}</h3>
+            {/* <h3>{MESSAGES[parseInt(score)]}</h3> */}
             <label className='input-label'>Solutions
                 <select name="solutions" onChange={updateSolution}>
                     {solutionList.map((solution, solutionIdx)=> {
@@ -83,17 +83,14 @@ export function attemptSolves (grid) {
 // get all solutions for grid with dates blocked
 function solve (grid, randomizedPieces, i) {
     const rotatedPieces = randomizedPieces[i];
-    // console.log('starting with ',8-i, grid)
     if (i>PIECES.length-1){
         console.log('found all of them!!')
         return [grid]
     } 
     let res =[];
     for (let currPiece of rotatedPieces) {
-        // console.log('currpiece', currPiece)
         let coordOptions = getCoordinates(currPiece, grid);
         for (let option of coordOptions) {
-            // console.log('trying with option', option);
             let nextGrid = addPiece(currPiece, grid, option);
             let nextSol = solve(nextGrid, randomizedPieces, i+1)
             res = res.concat(nextSol)
@@ -122,11 +119,9 @@ function getCoordinates (piece, grid) {
     const validCoordinates = [];
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
-            // if (row===0 || col === 0 || (row>0 && grid[row-1][col]>0) || (row<(GRID_SIZE-1) && grid[row+1][col]>0) || (col>0 && grid[row][col-1]>0) || (col<(GRID_SIZE-1) && grid[row][col+1]>0)) {
             if (checkValidCoordinate(piece, grid, row, col)) {
                 validCoordinates.push([row, col]);
             }
-            // }
         }
     }
     return validCoordinates
@@ -137,16 +132,18 @@ function checkValidCoordinate (piece, grid, row, col) {
     for (let pieceRow=0; pieceRow<piece.length; pieceRow++) {
         let projRow = row + pieceRow;
         if (row>0 && row < GRID_SIZE && grid[row].every(ele=> ele===0)) {
-            // if that row is completely empty, start filling horizontally first
+            // break if that row is completely empty, ensure start filling horizontally first
             return false;
         }
         for (let pieceCol=0; pieceCol<piece[0].length; pieceCol++) {
             let projCol = col + pieceCol;
             if (piece[pieceRow][pieceCol]>0) {
                 if (projRow >= GRID_SIZE || projCol >= GRID_SIZE) {
+                    // break if off the board
                     return false;
                 }
                 if (grid[projRow][projCol]>0) {
+                    // break if spot is filled
                     return false;
                 }
             }
