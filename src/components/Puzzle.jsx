@@ -8,6 +8,7 @@ import './Puzzle.css'
 
 export default function Puzzle () {
     const solutionList = useSelector((state)=> state.puzzle.solutions)
+    console.log('solution list', solutionList)
     const score = useSelector((state)=> state.puzzle.score)
     const dispatch = useDispatch();
     // set date
@@ -68,10 +69,11 @@ export function attemptSolves (grid) {
     let numPiecesPlaced = 0;
     let attempt = 0;
     let solutions;
-    const numAttempts = 10;
+    const numAttempts = 1;
     while ((attempt < numAttempts) && (numPiecesPlaced<8)) {
         let randomizedPieces = PIECES.sort(() => Math.random() - 0.5);
-        solutions = solve(grid, randomizedPieces);
+        let temp = solve(grid, randomizedPieces);
+        solutions = {8: [temp]}
         numPiecesPlaced = Object.keys(solutions);
         attempt ++
     }
@@ -80,42 +82,67 @@ export function attemptSolves (grid) {
 
 // get all solutions for grid with dates blocked
 function solve (grid, randomizedPieces) {
-    const solutions = {0: [grid]};
-    // for each of the 8 pieces
-    for (let i=0; i<randomizedPieces.length; i++) {
-        solutions[i+1]=[];
-        const rotatedPieces = randomizedPieces[i];
-        for (let j=0; j<rotatedPieces.length; j++) {
-            let currPiece = rotatedPieces[j];
-            // build upon the options for the previous piece, returning solutions with the current piece placed
-            // limit to only 5,000 solutions being considered at a time to reduce loading time
-            const maxSolutions = Math.min(solutions[i]?.length, 5000)
-            for (let solIdx=0; solIdx<maxSolutions; solIdx++) {
-                let currSolution = solutions[i][solIdx];
-                // for the current in progress solution/option, get all possible coordinates for the current piece to be placed
-                let currCoord = getCoordinates(currPiece, currSolution)
-                if (currCoord?.length>0) {
-                    // if there are no options for the current piece to be placed, try next
-                    for (let j=0; j<currCoord.length; j++) {
-                        // store all solutions where the current piece has been placed
-                        let nextSolution = addPiece(currPiece, currSolution, currCoord[j]);
-                        solutions[i+1].push(nextSolution);
-                    }
-                }
-            }
-        }
-        if (solutions[i+1].length>0) {
-            // if continuing, remove the outdated solutions (before the current piece has been placed)
-            delete solutions[i];
+    const piecesCopy = getDeepCopy(randomizedPieces);
+    console.log('starting with ',piecesCopy.length, grid)
+    if (piecesCopy.length<5){
+        console.log('few pieces left', piecesCopy)
+        return grid
+    } 
+    let rotatedPieces = piecesCopy.pop();
+    console.log(rotatedPieces, piecesCopy)
+    return rotatedPieces.map(currPiece => {
+        console.log(currPiece)
+        let coordOptions = getCoordinates(currPiece, grid);
+        if (coordOptions.length) {
+            return coordOptions.map(option => {
+                console.log('trying with option', option);
+                let nextGrid = addPiece(currPiece, grid, option);
+                return solve(nextGrid, piecesCopy)
+        })
         } else {
-            // if cannot progress, remove next key/value pair and break
-            delete solutions[i+1];
-            break;
+            return grid
         }
-        
-    }
-    return solutions; // index at 0 because values are already arrays
+    })
 }
+
+// // get all solutions for grid with dates blocked
+// function solve (grid, randomizedPieces) {
+//     const solutions = {0: [grid]};
+//     // for each of the 8 pieces
+//     for (let i=0; i<randomizedPieces.length; i++) {
+//         solutions[i+1]=[];
+//         const rotatedPieces = randomizedPieces[i];
+//         for (let j=0; j<rotatedPieces.length; j++) {
+//             let currPiece = rotatedPieces[j];
+//             // build upon the options for the previous piece, returning solutions with the current piece placed
+//             // limit to only 5,000 solutions being considered at a time to reduce loading time
+//             const maxSolutions = Math.min(solutions[i]?.length, 5000)
+//             for (let solIdx=0; solIdx<maxSolutions; solIdx++) {
+//                 let currSolution = solutions[i][solIdx];
+//                 // for the current in progress solution/option, get all possible coordinates for the current piece to be placed
+//                 let currCoord = getCoordinates(currPiece, currSolution)
+//                 if (currCoord?.length>0) {
+//                     // if there are no options for the current piece to be placed, try next
+//                     for (let j=0; j<currCoord.length; j++) {
+//                         // store all solutions where the current piece has been placed
+//                         let nextSolution = addPiece(currPiece, currSolution, currCoord[j]);
+//                         solutions[i+1].push(nextSolution);
+//                     }
+//                 }
+//             }
+//         }
+//         if (solutions[i+1].length>0) {
+//             // if continuing, remove the outdated solutions (before the current piece has been placed)
+//             delete solutions[i];
+//         } else {
+//             // if cannot progress, remove next key/value pair and break
+//             delete solutions[i+1];
+//             break;
+//         }
+        
+//     }
+//     return solutions; // index at 0 because values are already arrays
+// }
 
 // add piece to grid 
 function addPiece (piece, grid, coord) {

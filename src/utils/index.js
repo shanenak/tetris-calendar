@@ -34,10 +34,14 @@ export const getDefaultGrid = () => {
 
 // create deep copy of nested arrays
 export const getDeepCopy = (grid) => {
-    const deepCopy = [...Array(7)].map(e => Array(7).fill(0));
-    for (let row = 0; row < GRID_SIZE; row++) {
-        for (let col = 0; col < GRID_SIZE; col++) {
-            deepCopy[row][col] = grid[row][col]
+    const numRows = grid.length;
+    const numCols = grid[0].length;
+    const deepCopy = [...Array(numRows)].map(e => Array(numCols).fill(0));
+    for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+            if (grid[row][col]) {
+                deepCopy[row][col] = grid[row][col]
+            }
         }
     }
     return deepCopy
