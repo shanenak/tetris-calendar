@@ -24,6 +24,7 @@ export default function Puzzle () {
     
     // update selected date
     const updateDate = (e) => {
+        setSelectedSolution(0);
         const dateValues = e.target.value.split("-");
         setMonth(MONTHS_ONLY[parseInt(dateValues[1])]);
         setDate(parseInt(dateValues[2]));
