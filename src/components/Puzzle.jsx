@@ -66,33 +66,22 @@ export default function Puzzle () {
 }
 
 export function attemptSolves (grid) {
-    let numPiecesPlaced = 0;
-    let attempt = 0;
-    let solutions;
-    const numAttempts = 1;
-    while ((attempt < numAttempts) && (numPiecesPlaced<8)) {
-        let randomizedPieces = PIECES.sort(() => Math.random() - 0.5);
-        let temp = solve(grid, randomizedPieces, 0);
-        solutions = {8: temp}
-        numPiecesPlaced = Object.keys(solutions);
-        attempt ++
-    }
-    return solutions
+    let randomizedPieces = PIECES.sort(() => Math.random() - 0.5);
+    let temp = solve(grid, randomizedPieces, 0);
+    return {8: temp}
 }
 
 // get all solutions for grid with dates blocked
 function solve (grid, randomizedPieces, i) {
     const rotatedPieces = randomizedPieces[i];
     if (i>PIECES.length-1){
-        console.log('found all of them!!')
         return [grid]
     } 
     let res =[];
     for (let currPiece of rotatedPieces) {
-        let coordOptions = getCoordinates(currPiece, grid);
-        for (let option of coordOptions) {
-            let nextGrid = addPiece(currPiece, grid, option);
-            let nextSol = solve(nextGrid, randomizedPieces, i+1)
+        let nextGrids = getNextGrids(currPiece, grid);
+        for (let next of nextGrids) {
+            let nextSol = solve(next, randomizedPieces, i+1)
             res = res.concat(nextSol)
     }}
     return res
@@ -115,16 +104,18 @@ function addPiece (piece, grid, coord) {
 }
 
 // get valid coordinates for the specified piece and current grid
-function getCoordinates (piece, grid) {
-    const validCoordinates = [];
+function getNextGrids (piece, grid) {
+    const nextGrids = [];
+    let next;
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
             if (checkValidCoordinate(piece, grid, row, col)) {
-                validCoordinates.push([row, col]);
+                next = addPiece(piece, grid, [row, col]);
+                nextGrids.push(next)
             }
         }
     }
-    return validCoordinates
+    return nextGrids
 }
 
 // check if coordinate pair is valid for specified piece and current grid
