@@ -122,11 +122,11 @@ function getCoordinates (piece, grid) {
     const validCoordinates = [];
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
-            if (row===0 || col === 0 || (row>0 && grid[row-1][col]>0) || (row<(GRID_SIZE-1) && grid[row+1][col]>0) || (col>0 && grid[row][col-1]>0) || (col<(GRID_SIZE-1) && grid[row][col+1]>0)) {
-                if (checkValidCoordinate(piece, grid, row, col)) {
-                    validCoordinates.push([row, col]);
-                }
+            // if (row===0 || col === 0 || (row>0 && grid[row-1][col]>0) || (row<(GRID_SIZE-1) && grid[row+1][col]>0) || (col>0 && grid[row][col-1]>0) || (col<(GRID_SIZE-1) && grid[row][col+1]>0)) {
+            if (checkValidCoordinate(piece, grid, row, col)) {
+                validCoordinates.push([row, col]);
             }
+            // }
         }
     }
     return validCoordinates
@@ -136,6 +136,11 @@ function getCoordinates (piece, grid) {
 function checkValidCoordinate (piece, grid, row, col) {
     for (let pieceRow=0; pieceRow<piece.length; pieceRow++) {
         let projRow = row + pieceRow;
+        if (row>0 && row < GRID_SIZE && grid[row].every(ele=> ele===0)) {
+            // if that row is completely empty, start filling horizontally first
+            console.log('empty row', row, grid[row])
+            return false;
+        }
         for (let pieceCol=0; pieceCol<piece[0].length; pieceCol++) {
             let projCol = col + pieceCol;
             if (piece[pieceRow][pieceCol]>0) {
