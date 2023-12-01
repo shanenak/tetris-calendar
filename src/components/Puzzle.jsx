@@ -69,7 +69,7 @@ export function attemptSolves (grid) {
     let numPiecesPlaced = 0;
     let attempt = 0;
     let solutions;
-    const numAttempts = 1;
+    const numAttempts = 10;
     while ((attempt < numAttempts) && (numPiecesPlaced<8)) {
         let randomizedPieces = PIECES.sort(() => Math.random() - 0.5);
         let temp = solve(grid, randomizedPieces);
@@ -82,27 +82,24 @@ export function attemptSolves (grid) {
 
 // get all solutions for grid with dates blocked
 function solve (grid, randomizedPieces) {
-    const piecesCopy = getDeepCopy(randomizedPieces);
+    const piecesCopy = randomizedPieces.slice(0, randomizedPieces.length-1);
+    let rotatedPieces = randomizedPieces[randomizedPieces.length-1];
     console.log('starting with ',piecesCopy.length, grid)
-    if (piecesCopy.length<5){
+    if (piecesCopy.length<3){
         console.log('few pieces left', piecesCopy)
         return grid
     } 
-    let rotatedPieces = piecesCopy.pop();
-    console.log(rotatedPieces, piecesCopy)
-    return rotatedPieces.map(currPiece => {
-        console.log(currPiece)
+    let res =[];
+    rotatedPieces.forEach(currPiece => {
+        console.log('currpiece', currPiece)
         let coordOptions = getCoordinates(currPiece, grid);
-        if (coordOptions.length) {
-            return coordOptions.map(option => {
-                console.log('trying with option', option);
-                let nextGrid = addPiece(currPiece, grid, option);
-                return solve(nextGrid, piecesCopy)
+        coordOptions.forEach(option => {
+            console.log('trying with option', option);
+            let nextGrid = addPiece(currPiece, grid, option);
+            res = res.concat(solve(nextGrid, piecesCopy))
         })
-        } else {
-            return grid
-        }
     })
+    return res
 }
 
 // // get all solutions for grid with dates blocked
@@ -165,8 +162,10 @@ function getCoordinates (piece, grid) {
     const validCoordinates = [];
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
-            if (checkValidCoordinate(piece, grid, row, col)) {
-                validCoordinates.push([row, col]);
+            if (row===0 || (row>1 && grid[row-1][col]>0) || (row<(GRID_SIZE-1) && grid[row+1][col]>0) || (col>1 && grid[row][col-1]>0) || (col<(GRID_SIZE-1) && grid[row][col+1]>0)) {
+                if (checkValidCoordinate(piece, grid, row, col)) {
+                    validCoordinates.push([row, col]);
+                }
             }
         }
     }
