@@ -13,7 +13,9 @@ The original prompt is described [here](https://paper.dropbox.com/doc/Basil-Fron
 
 ## Implementation
 
-This quick implementation was built with React.js, Redux, and JavaScript. Efficiency was the main constraint and was not fully optimized within the short development time frame. Currently, some dates do not result in a true solution to the problem as they are missing one or two of the tetris pieces. Additionally, a calculation limit is placed, so not all solutions are generated. Further study will be done to increase performance and effectiveness and reduce latency. 
+This quick implementation was built with React.js, Redux, and JavaScript. 
+
+Efficiently finding solutions was the main challenge and was not fully optimized within the short development time frame. Initially, I attempted with a brute force method with a calculation limit to reduce latency. This method consistently placed at least 7 of the 8 blocks in a reasonable time frame. Rather than doing a sensitivity analysis to try to improve the performance, I switched to recursion. This method requires loading time, but always results in a complete solution (all 8 pieces are placed).
 
 
 
